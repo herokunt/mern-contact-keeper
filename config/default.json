@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb://localhost/react-project",
+  "jwtSecret": "fsdfuwnsofms"
+}

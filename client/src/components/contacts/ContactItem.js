@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import ContactContext from '../../context/contact/contactContext'
 
 const ContactItem = ({ contact }) => {
+  const contactContext = useContext(ContactContext)
+  const { deleteContact, setCurrent, clearCurrent } = contactContext
+
   const {id, name, email, phone, type } = contact
+
+  const onDelete = () => {
+    deleteContact(contact.id)
+    clearCurrent()
+  }
 
   return (
     <div className="card my-1">
@@ -16,10 +25,10 @@ const ContactItem = ({ contact }) => {
         <p className="is-size-6">{phone}</p>
         <div className="field is-grouped mt-1">
           <div className="control">
-            <button className="button is-small is-dark">Edit</button>
+            <button className="button is-small is-dark" onClick={() => setCurrent(contact)}>Edit</button>
           </div>
           <div className="control">
-            <button className="button is-small is-danger">Delete</button>
+            <button className="button is-small is-danger" onClick={onDelete}>Delete</button>
           </div>
         </div>
       </div>

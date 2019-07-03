@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import ContactContext from '../../context/contact/contactContext'
 
 const ContactForm = () => {
   const contactContext = useContext(ContactContext)
+  const { addContact, current, clearCurrent, updateContact } = contactContext
 
   const [contact, setContact] = useState({
     name: '',
@@ -10,6 +11,19 @@ const ContactForm = () => {
     phone: '',
     type: 'personal'
   })
+
+  useEffect(() => {
+    if(current !== null){
+      setContact(current)
+    } else {
+      setContact({
+        name: '',
+        email: '',
+        phone: '',
+        type: 'personal'
+      })
+    }
+  }, [contactContext, current])
 
   const { name, email, phone, type } = contact
 
@@ -19,19 +33,22 @@ const ContactForm = () => {
 
   const onSubmit = e => {
     e.preventDefault()
-    contactContext.addContact(contact)
-    setContact({
-      name: '',
-      email: '',
-      phone: '',
-      type: 'personal'
-    })
+    if(current === null){
+      addContact(contact)
+    } else {
+      updateContact(contact)
+    }
+    clearAll()
+  }
+
+  const clearAll = () => {
+    clearCurrent()
   }
 
   return (
     <form className="mt-1" onSubmit={onSubmit}>
       <div className="field">
-      <div className="label has-text-centered is-size-4">Add Contact</div>
+      <div className="label has-text-centered is-size-4">{current ? 'Edit Contact' : 'Add Contact'}</div>
         <div className="control mt-1">
           <input className="input" name="name" type="text" placeholder="Contact name" value={name} onChange={onChange} />
         </div>
@@ -58,7 +75,14 @@ const ContactForm = () => {
             </label>
           </div>
       </div>
-      <button className="button is-primary">Add Contact</button>
+      <div className="field is-grouped mt-1">
+        <div className="control">
+          <button className={"button " + (current ? 'is-warning' : 'is-primary')}>{current ? 'Update Contact' : 'Add Contact'}</button>
+        </div>
+        <div className="control">
+          {current && <button className="button is-dark is-outlined" onClick={clearAll}>Clear</button> }
+        </div>
+      </div>
     </form>
   )
 }

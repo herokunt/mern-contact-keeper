@@ -18,7 +18,7 @@ router.get('/', auth, async (req, res, next) => {
 
   } catch (e) {
     console.error(e.message)
-    res.status(500).send('server error')
+    res.status(500).send({ msg: 'Server Error' })
   }
 })
 
@@ -26,8 +26,8 @@ router.get('/', auth, async (req, res, next) => {
 // @desc        Authenticate user and get token
 // @access      Public
 router.post('/', [
-  check('email', 'Please use a valid email').isEmail(),
-  check('password', 'Password is required').exists()
+  check('email', 'Please use a valid email').trim().isEmail(),
+  check('password', 'Password is required').trim().exists()
 ], async (req, res, next) => {
   const errors = validationResult(req)
   if(!errors.isEmpty()){

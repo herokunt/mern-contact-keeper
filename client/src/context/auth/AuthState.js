@@ -22,14 +22,65 @@ const AuthState = props => {
   const [state, dispatch] = useReducer(authReducer, initialState)
 
   // Load User
+  const loadUser = async () => {
+    const config = {
+      method: 'GET',
+      headers: {
+        'x-auth-token': state.token
+      }
+    }
+
+    try {
+      const response = await fetch('/api/auth', config)
+      if(!response.ok) {
+        const error = await response.json()
+        throw error
+      }
+
+      const user = await response.json()
+      dispatch({ type: USER_LOADED, payload: user })
+
+    } catch (err) {
+      dispatch({ type: REGISTER_FAIL, payload: err.msg || err.errors[0].msg })
+    }
+  }
 
   // Register User
+  // Proxy value in package json means we dont have to write the full URL
+  const register = async userInputData => {
+    const config = {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(userInputData)
+    }
+
+    try {
+      const response = await fetch('/api/users', config)
+      if(!response.ok) {
+        const error = await response.json()
+        throw error
+      }
+
+      const {token} = await response.json()
+      dispatch({ type: REGISTER_SUCCESS, payload: token })
+
+      loadUser()
+
+    } catch (err) {
+      dispatch({ type: REGISTER_FAIL, payload: err.msg || err.errors[0].msg })
+    }
+  }
 
   // Login User
 
   // Logout User
 
   // Clear Errors
+  const clearErrors = () => {
+    dispatch({ type: CLEAR_ERRORS })
+  }
 
   return (
     <AuthContext.Provider value={{
@@ -37,7 +88,10 @@ const AuthState = props => {
       isAuthenticated: state.isAuthenticated,
       user: state.user,
       loading: state.loading,
-      error: state.error
+      error: state.error,
+      loadUser,
+      register,
+      clearErrors
     }}>
       {props.children}
     </AuthContext.Provider>

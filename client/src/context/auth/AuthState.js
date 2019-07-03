@@ -74,8 +74,34 @@ const AuthState = props => {
   }
 
   // Login User
+  const login = async userInputData => {
+    const config = {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(userInputData)
+    }
+
+    try {
+      const response = await fetch('/api/auth', config)
+      if(!response.ok){
+        const error = await response.json()
+        throw error
+      }
+      const {token} = await response.json()
+      dispatch({ type: LOGIN_SUCCESS, payload: token })
+
+      loadUser()
+
+    } catch (err) {
+      dispatch({ type: LOGIN_FAIL, payload: err.msg || err.errors[0].msg })
+
+    }
+  }
 
   // Logout User
+  const logout = () => dispatch({ type: LOGOUT })
 
   // Clear Errors
   const clearErrors = () => {
@@ -91,6 +117,8 @@ const AuthState = props => {
       error: state.error,
       loadUser,
       register,
+      login,
+      logout,
       clearErrors
     }}>
       {props.children}

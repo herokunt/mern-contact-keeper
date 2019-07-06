@@ -11,19 +11,67 @@ const Navbar = ({ title, icon }) => {
     logout()
   }
 
+  const authView = (
+    <Fragment>
+      <div className="navbar-item has-dropdown is-hoverable">
+        <div className="navbar-link">
+          {user && (user.name)}
+        </div>
+        <div className="navbar-dropdown">
+          <a className="navbar-item">
+            <span className="has-icon-left">
+              <i className="fas fa-sign-out-alt"></i>Profile
+            </span>
+          </a>
+          <a className="navbar-item">
+            <span className="has-icon-left">
+              <i className="fas fa-sign-out-alt"></i>Report Bug
+            </span>
+          </a>
+          <a className="navbar-item" onClick={onLogout}>
+            <span className="has-icon-left">
+              <i className="fas fa-sign-out-alt"></i>Logout
+            </span>
+          </a>
+        </div>
+      </div>
+    </Fragment>
+  )
+
+  const guestView = (
+    <Fragment>
+      <div className="navbar-item">
+        <a href="/login" className="button">Login</a>
+      </div>
+      <div className="navbar-item">
+        <a href="/register" className="button">Register</a>
+      </div>
+    </Fragment>
+  )
+
   return (
-    <nav className="navbar is-info">
-      <h1 className="title">I'm a navbar!</h1>
+    <nav className="navbar has-shadow">
+      <div className="navbar-brand">
 
-      {user && (
-        <Fragment>
-          <button className="button is-success is-outlined">New</button>
-          <Link to='/'>Profile</Link>
-          <a onClick={onLogout} to='/logout'>Logout</a>
-        </Fragment>
-      )}
-
-      {!user && (<Fragment>Logout</Fragment>)}
+        <a href="#" className="navbar-item">
+          {icon}
+        </a>
+        <div className="navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <div className="navbar-menu">
+        <div className="navbar-start">
+          <div className="navbar-item">
+            <small>{title}</small>
+          </div>
+        </div>
+        <div className="navbar-end">
+          {isAuthenticated ? authView : guestView }
+        </div>
+      </div>
     </nav>
   )
 }
@@ -34,7 +82,7 @@ Navbar.propTypes = {
 }
 
 Navbar.defaultProps = {
-  title: 'Contact Manager',
+  title: 'A Modern Contact Manager',
   icon: 'fas fa-id-card-alt'
 }
 

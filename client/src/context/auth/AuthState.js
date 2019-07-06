@@ -66,8 +66,6 @@ const AuthState = props => {
       const {token} = await response.json()
       dispatch({ type: REGISTER_SUCCESS, payload: token })
 
-      loadUser()
-
     } catch (err) {
       dispatch({ type: REGISTER_FAIL, payload: err.msg || err.errors[0].msg })
     }
@@ -91,8 +89,6 @@ const AuthState = props => {
       }
       const {token} = await response.json()
       dispatch({ type: LOGIN_SUCCESS, payload: token })
-
-      loadUser()
 
     } catch (err) {
       dispatch({ type: LOGIN_FAIL, payload: err.msg || err.errors[0].msg })

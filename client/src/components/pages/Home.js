@@ -8,23 +8,25 @@ const Home = () => {
   const authContext = useContext(AuthContext)
 
   useEffect(() => {
+    console.log('thos')
     authContext.loadUser()
     // eslint-disable-next-line
   }, [])
 
   return (
-    <div className="columns">
-      {authContext.user && (<h1>User logged in</h1>)}
-      <div className="column is-6">
-        <ContactForm />
-      </div>
-      <div className="column is-6">
-        <div className="">
+    <section className="section">
+      <div className="columns">
+        <div className="column is-6">
+          <ContactForm />
         </div>
-        <ContactFilter />
-        <Contacts />
+        <div className="column is-6">
+          <div className="">
+          </div>
+          <ContactFilter />
+          <Contacts />
+        </div>
       </div>
-    </div>
+    </section>
   )
 }
 

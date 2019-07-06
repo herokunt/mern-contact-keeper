@@ -8,15 +8,19 @@ const Login = (props) => {
   const alertContext = useContext(AlertContext)
 
   const { setAlert } = alertContext
-  const { login, isAuthenticated, error, clearErrors } = authContext
+  const { login, isAuthenticated, error, clearErrors, token } = authContext
 
   useEffect(() => {
     if(isAuthenticated){
       props.history.push('/')
     }
 
+    if(token){
+      props.history.push('/')
+    }
+
     if(error){
-      setAlert('Invalid Credentials', 'is-danger')
+      setAlert('Invalid Login', 'is-danger')
       clearErrors()
     }
 
@@ -28,9 +32,9 @@ const Login = (props) => {
     password: ''
   })
 
+  const { email, password } = user
+
   const onChange = e => setUser({...user, [e.target.name]: e.target.value})
-
-
 
   const onSubmit = e => {
     e.preventDefault()
@@ -41,7 +45,6 @@ const Login = (props) => {
     }
   }
 
-  const { email, password } = user
 
   return (
     <section className="hero is-light is-fullheight">

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useCallback } from 'react'
 import AlertContext from '../../context/alert/alertContext'
 import AuthContext from '../../context/auth/authContext'
 
@@ -8,10 +8,14 @@ const Register = (props) => {
   const authContext = useContext(AuthContext)
 
   const { setAlert } = alertContext
-  const { register, error, clearErrors, isAuthenticated } = authContext
+  const { loadUser, register, error, clearErrors, isAuthenticated, token } = authContext
 
   useEffect(() => {
     if(isAuthenticated){
+      props.history.push('/')
+    }
+    
+    if(token){
       props.history.push('/')
     }
 

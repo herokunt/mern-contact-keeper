@@ -1,5 +1,6 @@
 import {
 ADD_CONTACT,
+CONTACT_ERROR,
 DELETE_CONTACT,
 SET_CURRENT,
 CLEAR_CURRENT,
@@ -15,6 +16,11 @@ export default (state, action) => {
       return {
         ...state,
         contacts: [...state.contacts, action.payload]
+      }
+    case CONTACT_ERROR:
+      return {
+        ...state,
+        error: action.payload
       }
     case DELETE_CONTACT:
       return {
